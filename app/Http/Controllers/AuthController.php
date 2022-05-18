@@ -124,9 +124,14 @@ function delete($id)
 //data edit function
 function edit($id)
 {
+
+
    return redirect()->action(
         [AuthController::class, 'dashboard'], ['id' => $id]
-    );
+    )
+    ;
+    $updata=fixed_ledger_account::find($id);
+    
 
     //return back()->withInput();
     //return redirect()->route('dashboard', ['id' => 1]);
