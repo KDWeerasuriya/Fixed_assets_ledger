@@ -38,5 +38,4 @@ Route::post('/do-register', [AuthController::class,"doRegister"]);
 Route::post("/conformord",[AuthController::class,"conformord"]);
 Route::get("/delete/{id}",[AuthController::class,"delete"]);
 Route::get("/edit/{id}",[AuthController::class,"edit"]);
-d
 
