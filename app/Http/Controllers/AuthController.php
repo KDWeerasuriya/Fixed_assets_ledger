@@ -84,15 +84,29 @@ class AuthController extends Controller
         ->with('acc_type', account_type::all())
         ->with('categ_name', category_name::all())
         ->with('control_account', controller_account::all());
-        // $fixeddata=fixed_ledger_account::all();
-        // return view ("dashboard",compact("fixeddata"));
-        //return view("dashboard");
     }
 
 //data Save function
      public function conformord(Request $request)
      {
           $saveconform = new fixed_ledger_account;
+          $this->validate($request,[
+
+
+            'account_type'=>'required',
+            'category_code'=>'required',
+            'main_accouns_code'=>'required',
+            'legger_accouns_name'=>'required',
+            'active'=>'required',
+            'category_name'=>'required',
+            'main_accouns_name'=>'required',
+            'Legger_accouns_code'=>'required',
+            'cost'=>'required|numeric',
+            'life_time'=>'required|numeric',
+            'depreciation_rate'=>'required|numeric',
+            'depreciation_method'=>'required',
+            ]);
+
 
           $saveconform->account_type=$request->account_type;
           $saveconform->category_code=$request->category_code;
@@ -110,7 +124,6 @@ class AuthController extends Controller
 
           $saveconform->save();
           return redirect()->back();
-          //return view("/dashboard");
      }
 
 //data delete function
@@ -124,26 +137,44 @@ function delete($id)
 //data edit function
 function edit($id)
 {
-
-
-   return redirect()->action(
-        [AuthController::class, 'dashboard'], ['id' => $id]
-    )
-    ;
-    $updata=fixed_ledger_account::find($id);
-    
-
-    //return back()->withInput();
-    //return redirect()->route('dashboard', ['id' => 1]);
-    //return view("dashboard");     Route::get('/dashboard', [AuthController::class,"dashboard"]);
+    $updateconform = new fixed_ledger_account;
+    return view('update-dashboard')
+    ->with('fixeddata', fixed_ledger_account::where('id',$id)->get())
+    ->with('depre_methods', depreciation_method::all())
+    ->with('acc_type', account_type::all())
+    ->with('categ_name', category_name::all())
+    ->with('control_account', controller_account::all());
 }
+//->with('control_account', controller_account::where('id',$id)->get());
+   // return redirect()->route("update-dashboard", $id);
+   //return redirect("update-dashboard")->route("edit", $id)
+    // $updata = fixed_ledger_account::find($id);
+
 
 //data update function
 public function update($id, Request $request) {
 
-    fixed_ledger_account::findOrFail($id)->update($request->all());
+    //$saveconform=fixed_ledger_account::findOrFail($id)->update($request->all());
+    $saveconform = fixed_ledger_account::findOrFail($id);
 
-    return redirect(route('posts.all'))->with('status', 'Post updated!');
+   
+
+    $saveconform->account_type=$request->account_type;
+    $saveconform->category_code=$request->category_code;
+    $saveconform->main_account_code=$request->main_accouns_code;
+    $saveconform->ledger_account_name=$request->legger_accouns_name;
+    $saveconform->status=$request->active;
+    $saveconform->category_name=$request->category_name;
+    $saveconform->main_account_name=$request->main_accouns_name;
+    $saveconform->ledger_account_code=$request->Legger_accouns_code;
+    $saveconform->cost=$request->cost;
+    $saveconform->life_time=$request->life_time;
+    $saveconform->depreciation_rate=$request->depreciation_rate;
+    $saveconform->depreciation_method=$request->depreciation_method;
+    $saveconform->date_of_depreciation=$request->date_of_depreciation;
+
+    $saveconform->save();
+    return redirect("dashboard");
 }
 
 

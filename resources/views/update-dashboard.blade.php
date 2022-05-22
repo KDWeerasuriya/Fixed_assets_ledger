@@ -21,8 +21,9 @@
   <script type="text/javascript" src="index.js"></script>
 
 <!-- Data table script -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.css">
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
   <script>
   $(document).ready( function () {
@@ -127,13 +128,17 @@
 
 
 <br>
-           
+                        
 <!-- crd 1 srrt -->
  <div class="card bg-light mb-3" style="max-width: 70rem;"> 
    <div class="card-header">
 
     <!-- form strt -->
-      <form action="{{url('/conformord')}}" method="POST" enctype="multipart/form-data">
+    
+    @foreach($fixeddata as $data)
+      <form action="{{url('/update',$data->id)}}" method="POST" enctype="multipart/form-data">
+      @endforeach
+
           @csrf
                     
           <div class="container-fluid">
@@ -145,7 +150,7 @@
                     <label for="input" class="col-sm-6 col-form-label">Accounts type</label>
                        <div class="col-sm-6">
                          <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="account_type">
-                           <option selected>Choose...</option>
+                           <option selected>@foreach($fixeddata as $data){{$data->account_type}}@endforeach</option> 
                             @foreach($acc_type as $data) <option >{{$data->name}}</option>  @endforeach
                           </select>
                         </div>
@@ -155,7 +160,7 @@
                        <label for="input" class="col-sm-6 col-form-label">Category name</label>
                         <div class="col-sm-6">
                           <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="category_name">
-                           <option selected>Choose...</option>
+                           <option selected>@foreach($fixeddata as $data){{$data->category_name}}@endforeach</option>
                             @foreach($categ_name as $data) <option >{{$data->name}}</option>  @endforeach
                           </select>
                         </div>
@@ -165,7 +170,7 @@
                     <label for="input" class="col-sm-6 col-form-label">Main accounts name </label>
                       <div class="col-sm-6">
                          <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="main_accouns_name">
-                           <option selected>Choose...</option>
+                           <option selected>@foreach($fixeddata as $data){{$data->main_account_name}}@endforeach</option>
                             @foreach($control_account as $data) <option >{{$data->name}}</option>  @endforeach
                         </select>
                       </div>
@@ -174,7 +179,7 @@
                   <div class="form-group row col-md-12">
                     <label for="input" class="col-sm-6 col-form-label">Ledger accounts name</label>
                       <div class="col-sm-6">
-                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="" name="legger_accouns_name">
+                        <input type="text" class="form-control" id="formGroupExampleInput" value="@foreach($fixeddata as $data){{$data->ledger_account_name}}@endforeach" name="legger_accouns_name">
                       </div>
                   </div>
                 </div>
@@ -185,7 +190,7 @@
                    <div class="form-group row col-md-12">
                      <label for="input" class="col-sm-6 col-form-label">Active</label>
                        <div class="col-sm-6">
-                         <input style="margin-left:auto; margin-right:auto;" class="form-check-input" type="checkbox" id="autoSizingCheck" name="active">
+                         <input style="margin-left:auto; margin-right:auto;" class="form-check-input" type="checkbox" id="autoSizingCheck"  name="active">
                        </div>
                     </div>
 
@@ -194,26 +199,26 @@
                     <label for="input" class="col-sm-6 col-form-label">Category code</label>
                       <div class="col-sm-6">
                         <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="category_code">
-                          <option selected>Choose...</option>
+                        <option selected>@foreach($fixeddata as $data){{$data->category_code}}@endforeach</option>
                            @foreach($categ_name as $data) <option >{{$data->code}}</option>  @endforeach
                         </select>
                       </div>
                   </div> 
 
                   <div class="form-group row col-md-12">
-                    <label for="input" class="col-sm-6 col-form-label">Main accouns code</label>
+                    <label for="input" class="col-sm-6 col-form-label">Main accounts code</label>
                       <div class="col-sm-6">
                         <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="main_accouns_code">
-                         <option selected>Choose...</option>
+                        <option selected>@foreach($fixeddata as $data){{$data->main_account_code}}@endforeach</option>
                            @foreach($control_account as $data) <option >{{$data->code}}</option>  @endforeach   
                         </select>
                        </div>
                   </div>
 
                   <div class="form-group row col-md-12">
-                    <label for="input" class="col-sm-6 col-form-label">Ledger accouns code</label>
+                    <label for="input" class="col-sm-6 col-form-label">Ledger accounts code</label>
                       <div class="col-sm-6">
-                        <input type="text" class="form-control" id="formGroupExampleInput1" placeholder="" name="Legger_accouns_code">
+                        <input type="text" class="form-control" id="formGroupExampleInput1" value="@foreach($fixeddata as $data){{$data->ledger_account_code}}@endforeach" name="Legger_accouns_code">
                       </div>
                   </div>
                 </div>
@@ -225,21 +230,21 @@
                   <div class="form-group row col-md-12">
                     <label for="input" class="col-sm-6 col-form-label">Cost</label>
                      <div class="col-sm-6">
-                      <input type="text" class="form-control" id="formGroupExampleInput1" placeholder="" name="cost">
+                      <input type="text" class="form-control" id="formGroupExampleInput1" value="@foreach($fixeddata as $data){{$data->cost}}@endforeach" name="cost">
                      </div>
                   </div>
 
                   <div class="form-group row col-md-12">
                     <label for="input" class="col-sm-6 col-form-label">Life time</label>
                       <div class="col-sm-6">
-                         <input type="text" class="form-control" id="formGroupExampleInput1" placeholder="" name="life_time">
+                         <input type="text" class="form-control" id="formGroupExampleInput1" value="@foreach($fixeddata as $data){{$data->life_time}}@endforeach" name="life_time">
                       </div>
                   </div>
 
                   <div class="form-group row col-md-12">
                     <label for="input" class="col-sm-6 col-form-label">Depreciation rate (%)</label>
                       <div class="col-sm-6">
-                        <input type="text" class="form-control" id="formGroupExampleInput1" placeholder="" name="depreciation_rate">
+                        <input type="text" class="form-control" id="formGroupExampleInput1" value="@foreach($fixeddata as $data){{$data->depreciation_rate}}@endforeach" name="depreciation_rate">
                       </div>
                   </div>
      
@@ -247,8 +252,8 @@
                    <label for="input" class="col-sm-6 col-form-label">Depreciation method </label>
                      <div class="col-sm-6">
                        <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="depreciation_method">
-                         <option selected>Choose...</option>
-                         @foreach($depre_methods as $data) <option >{{$data->name}}</option>  @endforeach
+                       <option selected>@foreach($fixeddata as $data){{$data->depreciation_method}}@endforeach</option>
+                         @foreach($depre_methods as $data) <option value="1">{{$data->name}}</option>  @endforeach
                        </select>
                       </div>
                   </div>
@@ -256,14 +261,12 @@
                   <div class="form-group row col-md-12">
                     <label for="input" class="col-sm-6 col-form-label">Date of depreciation</label>
                       <div class="col-sm-6">
-                        <input type="date" class="form-control" id="formGroupExampleInput" placeholder="" name="date_of_depreciation">
+                        <input type="date" class="form-control" id="formGroupExampleInput" value="@foreach($fixeddata as $data){{$data->date_of_depreciation}}@endforeach" name="date_of_depreciation">
                       </div>
                   </div>
 
                    <div class="flex-parent jc-center">
-                     <button type="reset" class="btn btn-primary btn-sm" >Clear</button>
-                       &nbsp
-                     <button type="submit" class="btn btn-primary btn-sm" >Create</button>
+                     <button type="submit" class="btn btn-primary btn-sm" >Update</button>
                    </div> 
                 </div>
               <!-- 3nd col end --> 
@@ -273,59 +276,10 @@
       </form>
      <!-- form end -->
    </div>
-<!-- card 1 end -->   
+   <!-- card 1 end -->   
 
-<!-- card 2 start --> 
-<br>
-
-   <div class="card bg-light mb-3" style="max-width: 70rem;"> 
-     <div class="card-header">
-
-      <table id="table_id" class="display">
-  
-        <thead>
-           <tr>
-              <th>Accouns type</th>
-              <th>Category code</th>
-              <th>Category name</th>
-              <th>Main accouns code</th>
-              <th>Main accouns name </th>
-              <th>Legger accouns code</th>
-              <th>Legger accouns name</th>
-              <th>Status</th>
-              <th>Action</th>
-          </tr>
-        </thead>
-
-      @foreach($fixeddata as $data)
-       <tbody> 
-          <tr>
-              <td>{{$data->account_type}}</td>
-              <td>{{$data->category_code}}</td>
-              <td>{{$data->category_name}}</td>
-              <td>{{$data->main_account_code}}</td>
-              <td>{{$data->main_account_name}}</td>
-              <td>{{$data->ledger_account_code}}</td>
-              <td>{{$data->ledger_account_name}}</td>
-              <td>{{$data->status}}</td>
-              <td>      
-                <a href='edit/{{ $data->id }}'><img src="/icons/pen.png" style="width:20px; height:20px;"></a>
-                <a href="delete/{{ $data->id }}"><img src="/icons/remove.png" style="width:20px; height:20px;"></a>
-              </td>
-          </tr>
-       </tbody>
-      @endforeach
-    
-     </table>
-
-
-
-
-     </div>
-    </div>
-     <!-- card 2 end --> 
    </div>
-   </div>
-
+ </div>
+   
   </body>
 </html>
