@@ -14,11 +14,19 @@
 
 
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" />
-  <script type="text/javascript" src="index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" />
+<script type="text/javascript" src="index.js"></script>
+
+
+<!-- {{-- selec2 cdn --}}-->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+<!-- Sweet alert script -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <!-- Data table script -->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.css">
@@ -29,6 +37,7 @@
       $('#table_id').DataTable();
   } );</script>
 <!-- Data table script end -->
+
 
   <style>
     /* button center style strt*/
@@ -58,8 +67,7 @@
 </head>
 
 <body class="antialiased">
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+ <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Fixed Assets Ledger</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +78,6 @@
       </ul>
       
       <form class="d-flex">
-          
           <div class="nav-item dropdown flex-row-reverse">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                @if(\Auth::check())
@@ -87,7 +94,7 @@
       </form>
     </div>
   </div>
-</nav>
+ </nav>
 
   <div class="container">
     <!-- main app container -->
@@ -97,15 +104,16 @@
           <div class="col-md-6 offset-md-3">
             
             
-               <!-- Show any success message -->
-            <!--
+           <!-- Show any success message -->
+              <!--
               @if (\Session::has('success'))
                 <div class="alert alert-success">
                     <ul>
                         <li>{!! \Session::get('success') !!}</li>
                     </ul>
                 </div>
-            @endif -->
+              @endif
+              -->
            <!-- Show any success message -->
 
             <!-- Check user is logged in -->
@@ -122,13 +130,10 @@
           </div>
         </div>
       </div>
-    </div>
-    
+  </div>
 
-
-<br>
-           
-<!-- crd 1 srrt -->
+    <br>        
+ <!-- crd 1 srrt -->
  <div class="card bg-light mb-3" style="max-width: 70rem;"> 
    <div class="card-header">
 
@@ -144,8 +149,9 @@
                   <div class="form-group row col-md-12">                 
                     <label for="input" class="col-sm-6 col-form-label">Accounts type</label>
                        <div class="col-sm-6">
-                         <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="account_type">
-                           <option selected>Choose...</option>
+                      <!--   <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="account_type">--> 
+                         <select class="select2-multiple form-control" name="account_type"  id="select2Multiple">  
+                           
                             @foreach($acc_type as $data) <option >{{$data->name}}</option>  @endforeach
                           </select>
                         </div>
@@ -188,7 +194,6 @@
                          <input style="margin-left:auto; margin-right:auto;" class="form-check-input" type="checkbox" id="autoSizingCheck" name="active">
                        </div>
                     </div>
-
 
                   <div class="form-group row col-md-12">
                     <label for="input" class="col-sm-6 col-form-label">Category code</label>
@@ -273,16 +278,14 @@
       </form>
      <!-- form end -->
    </div>
-<!-- card 1 end -->   
+ <!-- card 1 end -->   
 
-<!-- card 2 start --> 
-<br>
+ <!-- card 2 start --> 
 
    <div class="card bg-light mb-3" style="max-width: 70rem;"> 
      <div class="card-header">
 
       <table id="table_id" class="display">
-  
         <thead>
            <tr>
               <th>Accouns type</th>
@@ -308,24 +311,61 @@
               <td>{{$data->ledger_account_code}}</td>
               <td>{{$data->ledger_account_name}}</td>
               <td>{{$data->status}}</td>
-              <td>      
-                <a href='edit/{{ $data->id }}'><img src="/icons/pen.png" style="width:20px; height:20px;"></a>
-                <a href="delete/{{ $data->id }}"><img src="/icons/remove.png" style="width:20px; height:20px;"></a>
+              <td>   
+                 <div style="width:40px;">
+                    <div style="float: left; width: 10px"> 
+                      <a href='edit/{{ $data->id }}'><img src="/icons/pen.png" style="width:20px; height:20px;"></a>
+                    </div>
+                    <div style="float: right; width: 10px">                     
+                      <form method="GET" action="{{ route('delete', $data->id) }}">
+                         <a  type="submit" class="show_confirm" data-toggle="tooltip" title='Delete'> <img src="/icons/remove.png" style="width:20px; height:20px;"></a>                   
+                      </form>
+                    </div>
+                 </div>              
               </td>
           </tr>
        </tbody>
       @endforeach
-    
      </table>
-
-
-
-
      </div>
     </div>
      <!-- card 2 end --> 
    </div>
-   </div>
+</div>
+</body>
 
-  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+  <script type="text/javascript">
+ 
+     $('.show_confirm').click(function(event) {
+          var form =  $(this).closest("form");
+          var name = $(this).data("name");
+          event.preventDefault();
+          swal({
+              title: `Are you sure you want to delete this record?`,
+              text: "If you delete this, it will be gone forever.",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+              form.submit();
+            }
+          });
+      });
+  
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Select2 Multiple
+            $('.select2-multiple').select2({
+                placeholder: "Select",
+                allowClear: true
+            });
+
+        });
+
+    </script>
 </html>

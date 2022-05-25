@@ -20,11 +20,6 @@ Route::get("/",[fixedAssetLedge::class,"viewdashboard"]);
 Route::get('/', function () {
     return view('welcome');
 });
-
-
-
-
-
     Route::group(['middleware' =>Authenticate::class ], function () {
     Route::get('/dashboard', [AuthController::class,"dashboard"]);
     Route::get('/logout', [AuthController::class,"logout"]);
@@ -36,7 +31,7 @@ Route::post('/do-login', [AuthController::class,"doLogin"]);
 Route::post('/do-register', [AuthController::class,"doRegister"]);
 
 Route::post("/conformord",[AuthController::class,"conformord"]);
-Route::get("/delete/{id}",[AuthController::class,"delete"]);
+Route::get("/delete/{id}",[AuthController::class,"delete"])->name("delete");
 Route::get("/edit/{id}",[AuthController::class,"edit"]);
 Route::post("/update/{id}",[AuthController::class,"update"]);
 
