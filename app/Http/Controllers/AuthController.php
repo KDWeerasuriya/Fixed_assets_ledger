@@ -71,11 +71,10 @@ class AuthController extends Controller
             $User->email = $request->email;
             $User->password = bcrypt($request->password);
             $User->save();
-
             return redirect("login")->with('success', 'You have successfully registered, Login to access your dashboard');
         }
     }
-// show dashboard
+    // show dashboard
     function dashboard()
     {
         return View('dashboard')
@@ -83,14 +82,15 @@ class AuthController extends Controller
         ->with('depre_methods', depreciation_method::all())
         ->with('acc_type', account_type::all())
         ->with('categ_name', category_name::all())
-        ->with('control_account', controller_account::all());
+        ->with('control_account', controller_account::all())
+        ;
     }
 
-//data Save function
+    //data Save function
     public function conformord(Request $request)
     {
           $saveconform = new fixed_ledger_account;
-          $this->validate($request,[
+         $this->validate($request,[
             'account_type'=>'required',
             'category_code'=>'required',
             'main_accouns_code'=>'required',
@@ -104,8 +104,7 @@ class AuthController extends Controller
             'depreciation_rate'=>'required|numeric',
             'depreciation_method'=>'required',
             ]);
-
-
+ 
           $saveconform->account_type=$request->account_type;
           $saveconform->category_code=$request->category_code;
           $saveconform->main_account_code=$request->main_accouns_code;
@@ -123,7 +122,7 @@ class AuthController extends Controller
           return redirect()->back();
     }
 
-//data delete function
+    //data delete function
     function delete($id)
     {
           $deketeform = fixed_ledger_account::find($id);
@@ -131,7 +130,7 @@ class AuthController extends Controller
           return redirect()->back();
     }
 
-//data edit function
+    //data edit function
     function edit($id)
     {
           $updateconform = new fixed_ledger_account;
@@ -143,8 +142,7 @@ class AuthController extends Controller
          ->with('control_account', controller_account::all());
     }
 
-
-//data update function
+    //data update function
     public function update($id, Request $request) 
     {
          //$saveconform=fixed_ledger_account::findOrFail($id)->update($request->all());
@@ -166,7 +164,56 @@ class AuthController extends Controller
          return redirect("dashboard");
     }
 
-// logout method to clear the sesson of logged in user
+
+    //getCategoryName function
+    public function getCategoryName(Request $request){
+		$acc_id=$request->post('id');
+        $category_name=category_name::where('account_types_id',$acc_id)->get();       
+        $html='<option value="select Category name"></option>';
+        $html='<option value="">Select</option>';
+		foreach($category_name as $list){
+            $html.='<option value="'.$list->id.'">'.$list->name.'</option>';
+
+        }
+        
+		echo $html;
+	}
+	//getMainAccountsName function
+	public function getMainAccountsName(Request $request){
+		$categoryid=$request->post('id');
+		$main_accouns_name=controller_account::where('category_names_id',$categoryid)->get();
+		$html='<option value="">Select</option>';
+		foreach($main_accouns_name as $list){
+			$html.='<option value="'.$list->name.'">'.$list->name.'</option>';
+		}
+		echo $html;
+	}
+
+
+     //updategetCategoryName function
+     public function updategetCategoryName(Request $request){
+		$acc_id=$request->post('id');
+        $category_name=category_name::where('account_types_id',$acc_id)->get();
+        $html='<option value="select Category name"></option>';
+        $html='<option value="">Select</option>';
+		foreach($category_name as $list){
+            $html.='<option value="'.$list->id.'">'.$list->name.'</option>';
+
+        }    
+		echo $html;
+	}
+	//updategetMainAccountsName function
+	public function updategetMainAccountsName(Request $request){
+		$categoryid=$request->post('id');
+		$main_accouns_name=controller_account::where('category_names_id',$categoryid)->get();
+		$html='<option value="">Select</option>';
+		foreach($main_accouns_name as $list){
+			$html.='<option value="'.$list->name.'">'.$list->name.'</option>';
+		}
+		echo $html;
+	}
+
+    // logout method to clear the sesson of logged in user
     function logout()
     {
          \Auth::logout();

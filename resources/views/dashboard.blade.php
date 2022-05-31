@@ -135,6 +135,15 @@
     <br>        
  <!-- crd 1 srrt -->
  <div class="card bg-light mb-3" style="max-width: 70rem;"> 
+
+
+        @foreach($errors->all() as $error)
+          <div class="alert alert-danger" role="alert">
+            {{$error}}
+          </div>
+        @endforeach
+
+
    <div class="card-header">
 
     <!-- form strt -->
@@ -149,10 +158,12 @@
                   <div class="form-group row col-md-12">                 
                     <label for="input" class="col-sm-6 col-form-label">Accounts type</label>
                        <div class="col-sm-6">
-                      <!--   <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="account_type">--> 
-                         <select class="select2-multiple form-control" name="account_type"  id="select2Multiple">  
-                           
-                            @foreach($acc_type as $data) <option >{{$data->name}}</option>  @endforeach
+                         <!--   <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="account_type">--> 
+                         <select class="select2-multiple form-control" name="account_type"  id="account_type"> 
+                           <option value="">Select</option>              
+                            @foreach($acc_type as $list)
+				                    <option value="{{$list->id}}">{{$list->name}}</option>
+		                      	@endforeach
                           </select>
                         </div>
                    </div>
@@ -160,9 +171,8 @@
                     <div class="form-group row col-md-12">
                        <label for="input" class="col-sm-6 col-form-label">Category name</label>
                         <div class="col-sm-6">
-                          <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="category_name">
-                           <option selected>Choose...</option>
-                            @foreach($categ_name as $data) <option >{{$data->name}}</option>  @endforeach
+                          <select class="custom-select mr-sm-2" id="category_name" name="category_name">                           
+                          <option value="select Category name"></option>
                           </select>
                         </div>
                     </div>
@@ -170,9 +180,8 @@
                   <div class="form-group row col-md-12">
                     <label for="input" class="col-sm-6 col-form-label">Main accounts name </label>
                       <div class="col-sm-6">
-                         <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="main_accouns_name">
-                           <option selected>Choose...</option>
-                            @foreach($control_account as $data) <option >{{$data->name}}</option>  @endforeach
+                         <select class="custom-select mr-sm-2" id="main_accouns_name" name="main_accouns_name">
+                         <option value=""></option>
                         </select>
                       </div>
                   </div>
@@ -199,8 +208,7 @@
                     <label for="input" class="col-sm-6 col-form-label">Category code</label>
                       <div class="col-sm-6">
                         <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="category_code">
-                          <option selected>Choose...</option>
-                           @foreach($categ_name as $data) <option >{{$data->code}}</option>  @endforeach
+                        @foreach($categ_name as $data) <option >{{$data->code}}</option>  @endforeach
                         </select>
                       </div>
                   </div> 
@@ -210,7 +218,7 @@
                       <div class="col-sm-6">
                         <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="main_accouns_code">
                          <option selected>Choose...</option>
-                           @foreach($control_account as $data) <option >{{$data->code}}</option>  @endforeach   
+                         @foreach($control_account as $data) <option >{{$data->code}}</option>  @endforeach 
                         </select>
                        </div>
                   </div>
@@ -303,9 +311,44 @@
       @foreach($fixeddata as $data)
        <tbody> 
           <tr>
-              <td>{{$data->account_type}}</td>
+
+              <td>          
+                <?php
+                      $at = $data->account_type;
+
+                      if ($at ==1 ) {
+                        $atx = 'Assets';
+                      } 
+                      elseif($at ==2 ) {
+                        $atx = 'Libilites';
+                      }
+                      elseif($at ==3 ) {
+                        $atx = 'Equity';
+                      }
+                      elseif($at ==4 ) {
+                        $atx = 'Income';
+                      }
+
+                      echo $atx;
+                ?>
+              </td>
               <td>{{$data->category_code}}</td>
-              <td>{{$data->category_name}}</td>
+              <td>
+              <?php
+                      
+                      $cn = $data->category_name;
+
+                      if ($cn ==1 ) {
+                        $atxx = 'Current Assets';
+                      } 
+                      elseif($cn ==2 ) {
+                        $atxx = 'Non-Current Assets';
+                      }
+                     
+
+                      echo $atxx;
+                ?>
+              </td>
               <td>{{$data->main_account_code}}</td>
               <td>{{$data->main_account_name}}</td>
               <td>{{$data->ledger_account_code}}</td>
@@ -356,16 +399,37 @@
       });
   
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Select2 Multiple
-            $('.select2-multiple').select2({
-                placeholder: "Select",
-                allowClear: true
-            });
+ 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+jQuery(document).ready(function(){
+  jQuery('#account_type').change(function(){
+    let id=jQuery(this).val();
+    jQuery('#main_accouns_name').html('<option value=""></option>')
+    jQuery.ajax({
+      url:'/getCategoryName',
+      type:'post',
+      data:'id='+id+'&_token={{csrf_token()}}',
+      success:function(result){
+        jQuery('#category_name').html(result)
+      }
+    });
+  });
+  
+  jQuery('#category_name').change(function(){
+    let id=jQuery(this).val();
+    jQuery.ajax({
+      url:'/getMainAccountsName',
+      type:'post',
+      data:'id='+id+'&_token={{csrf_token()}}',
+      success:function(result){
+        jQuery('#main_accouns_name').html(result)
+      }
+    });
+  });
+  
+});
+  
+</script>
 
-        });
-
-    </script>
 </html>

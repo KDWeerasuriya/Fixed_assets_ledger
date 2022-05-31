@@ -14,16 +14,16 @@
 
 
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" />
-  <script type="text/javascript" src="index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" />
+<script type="text/javascript" src="index.js"></script>
 
 <!-- Data table script -->
 
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.css">
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
   <script>
   $(document).ready( function () {
@@ -97,19 +97,6 @@
         <div class="row">
           <div class="col-md-6 offset-md-3">
             
-            
-               <!-- Show any success message -->
-            <!--
-              @if (\Session::has('success'))
-                <div class="alert alert-success">
-                    <ul>
-                        <li>{!! \Session::get('success') !!}</li>
-                    </ul>
-                </div>
-            @endif -->
-           <!-- Show any success message -->
-
-            <!-- Check user is logged in -->
             @if(\Auth::check())
               
             @else
@@ -124,8 +111,6 @@
         </div>
       </div>
     </div>
-    
-
 
 <br>
                         
@@ -135,7 +120,7 @@
 
     <!-- form strt -->
     
-    @foreach($fixeddata as $data)
+      @foreach($fixeddata as $data)
       <form action="{{url('/update',$data->id)}}" method="POST" enctype="multipart/form-data">
       @endforeach
 
@@ -149,9 +134,29 @@
                   <div class="form-group row col-md-12">                 
                     <label for="input" class="col-sm-6 col-form-label">Accounts type</label>
                        <div class="col-sm-6">
-                         <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="account_type">
-                           <option selected>@foreach($fixeddata as $data){{$data->account_type}}@endforeach</option> 
-                            @foreach($acc_type as $data) <option >{{$data->name}}</option>  @endforeach
+                       <select class="select2-multiple form-control" name="account_type"  id="account_type"> 
+                       <option selected>
+                         <?php
+                            $at = $data->account_type;             
+
+                            if ($at ==1 ) {
+                              $atx = 'Assets';
+                            } 
+                            elseif($at ==2 ) {
+                              $atx = 'Libilites';
+                            }
+                            elseif($at ==3 ) {
+                              $atx = 'Equity';
+                            }
+                            elseif($at ==4 ) {
+                              $atx = 'Income';
+                            }
+                            echo $atx;             
+                         ?>    
+                        </option>           
+                            @foreach($acc_type as $list)
+				                    <option value="{{$list->id}}">{{$list->name}}</option>
+		                      	@endforeach
                           </select>
                         </div>
                    </div>
@@ -159,9 +164,22 @@
                     <div class="form-group row col-md-12">
                        <label for="input" class="col-sm-6 col-form-label">Category name</label>
                         <div class="col-sm-6">
-                          <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="category_name">
-                           <option selected>@foreach($fixeddata as $data){{$data->category_name}}@endforeach</option>
-                            @foreach($categ_name as $data) <option >{{$data->name}}</option>  @endforeach
+                        <select class="custom-select mr-sm-2" id="category_name" name="category_name"> 
+                        <option selected>
+                          <?php
+                      
+                              $cn = $data->category_name;
+
+                              if ($cn ==1 ) {
+                                $atxx = 'Current Assets';
+                              } 
+                              elseif($cn ==2 ) {
+                                $atxx = 'Non-Current Assets';
+                              }
+                              echo $atxx;
+                          ?>     
+                        </option>                             
+                          <option value="select Category name"></option>
                           </select>
                         </div>
                     </div>
@@ -169,9 +187,9 @@
                   <div class="form-group row col-md-12">
                     <label for="input" class="col-sm-6 col-form-label">Main accounts name </label>
                       <div class="col-sm-6">
-                         <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="main_accouns_name">
-                           <option selected>@foreach($fixeddata as $data){{$data->main_account_name}}@endforeach</option>
-                            @foreach($control_account as $data) <option >{{$data->name}}</option>  @endforeach
+                      <select class="custom-select mr-sm-2" id="main_accouns_name" name="main_accouns_name">
+                      <option selected>@foreach($fixeddata as $data){{$data->main_account_name}}@endforeach</option> 
+                         <option value=""></option>
                         </select>
                       </div>
                   </div>
@@ -190,7 +208,7 @@
                    <div class="form-group row col-md-12">
                      <label for="input" class="col-sm-6 col-form-label">Active</label>
                        <div class="col-sm-6">
-                         <input style="margin-left:auto; margin-right:auto;" class="form-check-input" type="checkbox" id="autoSizingCheck"  name="active">
+                         <input style="margin-left:auto; margin-right:auto;" class="form-check-input" type="checkbox" id="autoSizingCheck"   name="active" checked>
                        </div>
                     </div>
 
@@ -282,4 +300,35 @@
  </div>
    
   </body>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+      jQuery(document).ready(function(){
+        jQuery('#account_type').change(function(){
+          let id=jQuery(this).val();
+          jQuery('#main_accouns_name').html('<option value=""></option>')
+          jQuery.ajax({
+            url:'/updategetCategoryName',
+            type:'post',
+            data:'id='+id+'&_token={{csrf_token()}}',
+            success:function(result){
+              jQuery('#category_name').html(result)
+            }
+          });
+        });
+        
+      jQuery('#category_name').change(function(){
+        let id=jQuery(this).val();
+        jQuery.ajax({
+          url:'/updategetMainAccountsName',
+          type:'post',
+          data:'id='+id+'&_token={{csrf_token()}}',
+          success:function(result){
+            jQuery('#main_accouns_name').html(result)
+          }
+        });
+      });
+      
+    });
+  
+</script>
 </html>

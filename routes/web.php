@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get("/",[fixedAssetLedge::class,"viewdashboard"]);
+Route::get("/",[FixedAssetLedge::class,"viewdashboard"]);
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,4 +34,10 @@ Route::post("/conformord",[AuthController::class,"conformord"]);
 Route::get("/delete/{id}",[AuthController::class,"delete"])->name("delete");
 Route::get("/edit/{id}",[AuthController::class,"edit"]);
 Route::post("/update/{id}",[AuthController::class,"update"]);
+
+Route::post('/getCategoryName', [AuthController::class,'getCategoryName']);
+Route::post('/getMainAccountsName', [AuthController::class,'getMainAccountsName']);
+
+Route::post('/updategetCategoryName', [AuthController::class,'updategetCategoryName']);
+Route::post('/updategetMainAccountsName', [AuthController::class,'updategetMainAccountsName']);
 
